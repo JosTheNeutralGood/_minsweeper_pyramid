@@ -1,6 +1,14 @@
 .header-bar {
   height: 100px;
-  max-width: 100%;
+  width: 100%;
+}
+
+.header-buffer {
+  display: block;
+  height: 100px;
+  width: 488px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .mine {
@@ -11,29 +19,77 @@
 h1 {
   display: inline-block;
   max-height:100%;
+  text-align: center;
 }
 
+.coices {
+  width: 100%;
+}
+
+.choice-label {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.choice-immage {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 @media (max-width: 2199px) {
-	.header-buffer {
+	.choose {
 	  display: inline-block;
-	  max-height:100%;
-	  width:28%;
+	}
+	
+	.beginner {
+	  width: 15%;
+	}
+	
+	.intermediate {
+	  width: 35%;
+	}
+	
+	.expert {
+	  width: 48%;
 	}
 }
 
 @media (max-width: 960px) {
-	.header-buffer {
+	
+	.choose {
 	  display: inline-block;
-	  max-height:100%;
-	  width:20%;
+	}
+	
+	.beginner {
+	  width: 23%;
+	}
+	
+	.intermediate {
+	  width: 35%;
+	}
+	
+	.expert {
+	  width: 40%;
 	}
 }
 
-@media (max-width: 600px) {
-	.header-buffer {
-	  display: inline-block;
-	  max-height:100%;
-	  width:0%;
+@media (max-width: 722px) {
+	.choice-immage {
+	  display: none;
+	}
+	
+	.beginner {
+	  width: 100%;
+	}
+	
+	.intermediate {
+	  width: 100%;
+	}
+	
+	.expert {
+	  width: 100%;
 	}
 }

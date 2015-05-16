@@ -20,29 +20,35 @@
   
   <body>
     <div class="container-fluid header-bar" >
-      <div class= "header-buffer"></div>
-      <img class="mine" src="${request.static_url('minesweep:static/Minesweeper_Icon.png')}" alt="mine">
-        <h1>MINESWEEPER</h1>
-      <img class="mine" src="${request.static_url('minesweep:static/Minesweeper_Icon.png')}" alt="mine">
+      <div class= "header-buffer">
+        <img class="mine" src="${request.static_url('minesweep:static/Minesweeper_Icon.png')}" alt="mine">
+          <h1>MINESWEEPER</h1>
+        <img class="mine" src="${request.static_url('minesweep:static/Minesweeper_Icon.png')}" alt="mine">
+      </div>
     </div>
     
-    <div class="choose-beginer">
-      <a href="${b_url}">
-        <img src="${request.static_url('minesweep:static/beginner')}" alt="beginner game">
-      </a>
-    </div>
-    
-    <div class="choose-intermediate">
-      <a href="${i_url}">
-        <img src="${request.static_url('minesweep:static/intermediate')}" alt="intermediate game">
-      </a>
-    </div>
-    
-    <div class="choose-expert">
-      <a href="${e_url}">
-        <img src="${request.static_url('minesweep:static/expert')}" alt="expert game">
-      </a>
-    </div>
+    <div class = "choices">
+		<div class="choose beginner">
+		  <a href="${b_url}">
+		    <p class="choice-label">Beginner</p>
+			<img class="choice-immage" src="${request.static_url('minesweep:static/beginner.png')}" alt="beginner game">
+		  </a>
+		</div>
+	
+		<div class="choose intermediate">
+		  <a href="${i_url}">
+		    <p class="choice-label">Intermediate</p>
+			<img class="choice-immage" src="${request.static_url('minesweep:static/intermediate.png')}" alt="intermediate game">
+		  </a>
+		</div>
+	
+		<div class="choose expert">
+		  <a href="${e_url}">
+		    <p class="choice-label">Expert</p>
+			<img class="choice-immage" src="${request.static_url('minesweep:static/expert.png')}" alt="expert game">
+		  </a>
+		</div>
+	</div>
     
   </body>
   

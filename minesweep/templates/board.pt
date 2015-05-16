@@ -20,12 +20,13 @@
   
   <body>
     <div class="container-fluid header-bar" >
-      <div class= "header-buffer"></div>
-      <img class="mine" src="${request.static_url('minesweep:static/Minesweeper_Icon.png')}" alt="mine">
-        <h1>MINESWEEPER</h1>
-      <img class="mine" src="${request.static_url('minesweep:static/Minesweeper_Icon.png')}" alt="mine">
+      <div class= "header-buffer">
+        <img class="mine" src="${request.static_url('minesweep:static/Minesweeper_Icon.png')}" alt="mine">
+          <h1>MINESWEEPER</h1>
+        <img class="mine" src="${request.static_url('minesweep:static/Minesweeper_Icon.png')}" alt="mine">
+      </div>
     </div>
   </body>
-  
+  <div><h2>${difficulty.title()} Game</h2></div>
   
 </html>
