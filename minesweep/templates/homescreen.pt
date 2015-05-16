@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="${request.locale_name}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="pyramid web application">
+    <meta name="author" content="Pylons Project">
+    <link rel="shortcut icon" href="${request.static_url('minesweep:static/flag.ico')}">
+
+    <title>Minesweeper Home</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+	
+	<!-- Custom styles for this scaffold -->
+    <link href="${request.static_url('minesweep:static/style.css')}" rel="stylesheet">
+    
+  </head>
+  
+  <body>
+    <div class="container-fluid header-bar" >
+      <div class= "header-buffer"></div>
+      <img class="mine" src="${request.static_url('minesweep:static/Minesweeper_Icon.png')}" alt="mine">
+        <h1>MINESWEEPER</h1>
+      <img class="mine" src="${request.static_url('minesweep:static/Minesweeper_Icon.png')}" alt="mine">
+    </div>
+    
+    <div class="choose-beginer">
+      <a href="${b_url}">
+        <img src="${request.static_url('minesweep:static/beginner')}" alt="beginner game">
+      </a>
+    </div>
+    
+    <div class="choose-intermediate">
+      <a href="${i_url}">
+        <img src="${request.static_url('minesweep:static/intermediate')}" alt="intermediate game">
+      </a>
+    </div>
+    
+    <div class="choose-expert">
+      <a href="${e_url}">
+        <img src="${request.static_url('minesweep:static/expert')}" alt="expert game">
+      </a>
+    </div>
+    
+  </body>
+  
+  
+</html>

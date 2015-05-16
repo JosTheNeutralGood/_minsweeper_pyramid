@@ -1,0 +1,39 @@
+.header-bar {
+  height: 100px;
+  max-width: 100%;
+}
+
+.mine {
+  display: inline-block;
+  max-height:100%;
+}
+
+h1 {
+  display: inline-block;
+  max-height:100%;
+}
+
+
+@media (max-width: 2199px) {
+	.header-buffer {
+	  display: inline-block;
+	  max-height:100%;
+	  width:28%;
+	}
+}
+
+@media (max-width: 960px) {
+	.header-buffer {
+	  display: inline-block;
+	  max-height:100%;
+	  width:20%;
+	}
+}
+
+@media (max-width: 600px) {
+	.header-buffer {
+	  display: inline-block;
+	  max-height:100%;
+	  width:0%;
+	}
+}
