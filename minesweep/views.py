@@ -80,10 +80,10 @@ def unique_mine(board, w, h):
 def blank_board(w, h):
   #returns w by h board filled with 0's meaning 0 mines around this spot
   board = []
-  row = []
+  column = []
   for y in range(0, h):
-    row.append(0)
+    column.append(0)
   for x in range(0, w):
-    board.append(row)
+    board.append(column)
   return board
     
