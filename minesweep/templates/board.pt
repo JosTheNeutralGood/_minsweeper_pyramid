@@ -40,9 +40,9 @@
       </div>
     </div>
     <div style = "width: 100%;">
-	    <table id = board-table class = 'board ${difficulty}-b'>
+	    <table id = 'board-table' class = 'board ${difficulty}-b'>
 	      <tr tal:repeat="row board">
-		    <td tal:repeat="unit row" class='board-unit covered'>
+		    <td tal:repeat="unit row" id="${repeat.unit.index}-${repeat.row.index}" class='board-unit covered'>
 		    </td>
 	      </tr>
 	    </table>
