@@ -1,4 +1,5 @@
 from pyramid.view import view_config
+import random
 
 @view_config(route_name='home', renderer='templates/homescreen.pt')
 def home_screen(request):
@@ -18,10 +19,14 @@ def board_view(request):
     width = 16
     mines = 40
   elif difficulty == 'expert':
-    height = 16
-    width = 31
+    height = 31
+    width = 16
     mines = 99
-  return_hash['board'] = init_board(width,height,mines)
+  #the board is generated in Javascript now
+  return_hash['board'] = blank_board(width,height)
+  #return_hash['board'] = init_board(width,height,mines)
+  return_hash.update({'width':width, 'height':height, 'mines':mines})
+  return return_hash
   
 
 @view_config(route_name='otherhome', renderer='templates/mytemplate.pt')
@@ -64,8 +69,8 @@ def init_board(w, h, m):
   return board
   
 def unique_mine(board, w, h):
-  x = randint(0, w)
-  y = randint(0, h)
+  x = random.randint(0, w-1)
+  y = random.randint(0, h-1)
   
   if board[x][y] != 'm':
     return {'x': x, 'y': y}
@@ -80,4 +85,5 @@ def blank_board(w, h):
     row.append(0)
   for x in range(0, w):
     board.append(row)
+  return board
     

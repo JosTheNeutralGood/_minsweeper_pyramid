@@ -3,24 +3,45 @@
   width: 100%;
 }
 
-.header-buffer {
+.header-buffer, .subheader-buffer {
   display: block;
   height: 100px;
-  width: 488px;
   margin-left: auto;
   margin-right: auto;
 }
 
-.mine {
+.beginner-subheader {
+  width: 290px;
+}
+
+.intermediate-subheader {
+  width: 340px;
+}
+
+.expert-subheader {
+  width: 260px;
+}
+
+.header-buffer {
+  width: 488px;
+}
+
+.mine, #mines, #clock {
   display: inline-block;
   max-height:100%;
 }
 
-h1 {
+#mines, #clock {
+  background-color:red;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+h1, h2{
   display: inline-block;
   max-height:100%;
-  text-align: center;
 }
+
 
 .coices {
   width: 100%;
@@ -37,6 +58,36 @@ h1 {
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.board-unit {
+  width: 16px;
+  height: 16px;
+}
+
+.board {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.beginner-b {
+  width = 144px;
+}
+
+.uncovered {
+  background-image: url("grid_icon_uncovered.bmp");
+}
+
+.covered {
+  background-image: url("grid_icon_covered.bmp");
+}
+
+.bomb-uncovered {
+  background-image: url("grid_icon_bomb_uncovered.bmp");
+}
+
+.bomb-activated {
+  background-image: url("grid_icon_bomb_activated.bmp");
 }
 
 @media (max-width: 2199px) {

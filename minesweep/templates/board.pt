@@ -16,6 +16,12 @@
 	<!-- Custom styles for this scaffold -->
     <link href="${request.static_url('minesweep:static/style.css')}" rel="stylesheet">
     
+    <!-- JQuery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    
+     <!-- Game JS -->
+    <script src="${request.static_url('minesweep:static/js/game.js')}" type="text/javascript"></script>
+    
   </head>
   
   <body>
@@ -26,7 +32,22 @@
         <img class="mine" src="${request.static_url('minesweep:static/Minesweeper_Icon.png')}" alt="mine">
       </div>
     </div>
+    <div class="container-fluid header-bar">
+      <div class= "subheader-buffer ${difficulty}-subheader">
+        <div id="mines">${mines}</div>
+        <h2>${difficulty.title()} Game</h2>
+        <div id="clock">0000</div>
+      </div>
+    </div>
+    <div style = "width: 100%;">
+	    <table class = 'board ${difficulty}-b'>
+	      <tr tal:repeat="row board">
+		    <td tal:repeat="unit row" class='board-unit covered'>
+		    </td>
+	      </tr>
+	    </table>
+    </div>
+    
   </body>
-  <div><h2>${difficulty.title()} Game</h2></div>
   
 </html>
