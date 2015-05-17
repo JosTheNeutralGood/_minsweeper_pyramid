@@ -7,18 +7,22 @@ def home_screen(request):
 
 @view_config(route_name='board', renderer='templates/board.pt')
 def board_view(request):
+  return_hash = request.matchdict
+  difficulty = return_hash['difficulty']
   if difficulty == 'beginner':
     height = 9
     width = 9
     mines = 10
-  elif difficulty == 'beginner':
-    height = 9
-    width = 9
-    mines = 10
-  elif difficulty == 'beginner':
-    height = 9
-    width = 9
-    mines = 10
+  elif difficulty == 'intermediate':
+    height = 16
+    width = 16
+    mines = 40
+  elif difficulty == 'expert':
+    height = 16
+    width = 31
+    mines = 99
+  return_hash['board'] = init_board(width,height,mines)
+  
 
 @view_config(route_name='otherhome', renderer='templates/mytemplate.pt')
 def my_view(request):
