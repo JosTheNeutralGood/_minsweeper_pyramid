@@ -1,32 +1,48 @@
 .header-bar {
-  height: 100px;
+  height: 90px;
   width: 100%;
 }
 
-.header-buffer, .subheader-buffer {
+.subheader-bar {
+  height: 65px;
+  width: 100%;
+}
+
+.game-bar {
+  height: 70px;
+  width: 100%;
+  margin-bottom: 11px;
+}
+
+.header-buffer, .subheader-buffer, .game-buffer {
   display: block;
-  height: 100px;
   margin-left: auto;
   margin-right: auto;
 }
 
-.beginner-subheader {
-  width: 290px;
-}
-
-.intermediate-subheader {
-  width: 340px;
-}
-
-.expert-subheader {
-  width: 260px;
+.game-buffer {
+  width: 150px;
+  height: 70px;
 }
 
 .header-buffer {
+  height: 90px;
   width: 488px;
 }
 
-.mine, #mines, #clock {
+.beginner-subheader {
+  width: 222px;
+}
+
+.intermediate-subheader {
+  width: 372px;
+}
+
+.expert-subheader {
+  width: 192px;
+}
+
+.mine, #mines, #clock, #face {
   display: inline-block;
   max-height:100%;
 }
@@ -41,7 +57,6 @@ h1, h2{
   display: inline-block;
   max-height:100%;
 }
-
 
 .coices {
   width: 100%;
@@ -74,6 +89,22 @@ h1, h2{
   width = 144px;
 }
 
+.happy {
+  background-image: url("faces_smile.png");
+}
+
+.scared {
+  background-image: url("faces_scared.png");
+}
+
+.cool {
+  background-image: url("faces_cool.png");
+}
+
+.dead {
+  background-image: url("faces_dead.png");
+}
+
 .uncovered {
   background-image: url("grid_icon_uncovered.bmp");
 }
@@ -88,6 +119,10 @@ h1, h2{
 
 .bomb-activated {
   background-image: url("grid_icon_bomb_activated.bmp");
+}
+
+.flagged {
+  background-image: url("grid_icon_flag.bmp");
 }
 
 @media (max-width: 2199px) {

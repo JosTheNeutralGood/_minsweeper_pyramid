@@ -7,16 +7,95 @@ function start_game(start_conditions){
 	var b_height = start_conditions['h'];
 	var b_length = start_conditions['l'];
 	var board = init_board(b_length, b_height, total_bombs);
-	var reset_clock = initialize_clock;
-	$(".board-unit").click( function(e){ click_unit($(e.target)); } );
+	var face = $("#face");
+	var path_for_image_src = face.prop('src');
+	var path_substring_length = path_for_image_src.lastIndexOf('/') + 1;
+	path_for_image_src = path_for_image_src.substring(0,path_substring_length);
+	var game_over = false;
+	var game_won = false;
+	var flags = 0;
+	var reset_clock = initialize_clock();
 	
-	function click_unit(unit){
-		var params = unit.attr('id').split("-");
-		var y = parseInt(params[0]);
-		var x = parseInt(params[1]);
-		console.log("x" + x.toString() + " y" + y.toString());
-		console.log(board[x][y]);
+	$(".board-unit").mousedown( function(e){ click_unit(e); } );
+	$(".board-unit").mouseup( function(e){ off_click_unit(e); } );
+	document.addEventListener('contextmenu', off_click_unit, false);
+	$("#board-table").attr('oncontextmenu', off_click_unit);
+	
+	function click_unit(e){
+		if(e.button == 0 && $(e.target).hasClass('covered'))
+		{
+			face.attr("src",  path_for_image_src + 'faces_scared.png');
+		}
 	};
+	
+	function off_click_unit(e) {
+		
+		var unit = $(e.target);
+		var flag_click = (e.button == 2 || e.button == 1);
+		
+		//only execute code if we are clicking an covered square
+		//or if we are right-clicking a flagged square to undo-it
+		//this prevents users from accidentally tripping mines they've flagged
+		if (false && covered || (flag_click && unit.hasClass("flagged")))
+		{
+			if (flag_click) 
+			{
+				if(unit.hasClass('covered'))
+				{
+					unit.removeClass('covered');
+					unit.addClass('flagged');
+					flags++;
+				}
+				else
+				{
+					//if we right click and it's not covered the function will only fire
+					//if the square is flagged to unflag it
+					unit.removeClass('flagged');
+					unit.addClass('covered');
+					flags--;
+				}
+				document.getElementById("mines").innerHTML = (total_bombs - flags).toString();
+			}
+			else
+			{
+				var params = unit.attr('id').split("-");
+				var y = parseInt(params[0]);
+				var x = parseInt(params[1]);
+				clicked_on = board[x][y];
+			}
+		}
+		
+		if(game_over)
+		{
+			//document.getElementById("face").className = "dead";
+			face.attr("src",  path_for_image_src + 'faces_dead.png');
+		}
+		else if(game_won)
+		{
+			//document.getElementById("face").className = "cool";
+			face.attr("src",  path_for_image_src + 'faces_cool.png');
+		}
+		else
+		{
+			//document.getElementById("face").className = "happy";
+			face.attr("src",  path_for_image_src + 'faces_smile.png');
+		}
+		return;
+	};
+	
+	function delete_unique_element_from_array(array, element) {
+		var len = array.length();
+		for(var i=0;i<len;i++)
+		{
+			if(array[i] == element)
+			{
+				array.splice(i, 1);
+				return array;
+			}
+		}
+		return array;
+	};
+	return false;
 };
 
 function init_board(w, h, m) {

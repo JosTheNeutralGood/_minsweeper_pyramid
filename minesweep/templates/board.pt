@@ -32,15 +32,20 @@
         <img class="mine" src="${request.static_url('minesweep:static/Minesweeper_Icon.png')}" alt="mine">
       </div>
     </div>
-    <div class="container-fluid header-bar">
+    <div class="container-fluid subheader-bar">
       <div class= "subheader-buffer ${difficulty}-subheader">
-        <div id="mines">${mines}</div>
         <h2>${difficulty.title()} Game</h2>
+      </div>
+    </div>
+    <div class="container-fluid game-bar">
+      <div class= "subheader-buffer game-buffer">
+        <div id="mines">${mines}</div>
+        <img id="face" src="${request.static_url('minesweep:static/faces_smile.png')}" alt="reset game">
         <div id="clock">0000</div>
       </div>
     </div>
-    <div style = "width: 100%;">
-	    <table id = 'board-table' class = 'board ${difficulty}-b'>
+    <div class="container-fluid" style="width: 100%;">
+	    <table id='board-table' class='board ${difficulty}-b' oncontextmenu="return false;">
 	      <tr tal:repeat="row board">
 		    <td tal:repeat="unit row" id="${repeat.unit.index}-${repeat.row.index}" class='board-unit covered'>
 		    </td>
