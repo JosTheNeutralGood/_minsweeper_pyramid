@@ -137,6 +137,38 @@ h2 {
   background-image: url("grid_icon_flag.bmp");
 }
 
+.adj-1 {
+  background-image: url("grid_icon_1.bmp");
+}
+
+.adj-2 {
+  background-image: url("grid_icon_2.bmp");
+}
+
+.adj-3 {
+  background-image: url("grid_icon_3.bmp");
+}
+
+.adj-4 {
+  background-image: url("grid_icon_4.bmp");
+}
+
+.adj-5 {
+  background-image: url("grid_icon_5.bmp");
+}
+
+.adj-6 {
+  background-image: url("grid_icon_6.bmp");
+}
+
+.adj-7 {
+  background-image: url("grid_icon_7.bmp");
+}
+
+.adj-8 {
+  background-image: url("grid_icon_8.bmp");
+}
+
 @media (max-width: 2199px) {
 	.choose {
 	  display: inline-block;

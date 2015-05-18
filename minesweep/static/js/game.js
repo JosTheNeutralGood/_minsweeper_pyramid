@@ -8,6 +8,7 @@ function start_game(start_conditions){
 	var b_height = start_conditions['h'];
 	var b_length = start_conditions['l'];
 	var board = init_board(b_length, b_height, total_mines);
+	//storing a list of bombs that were planted for later reference
 	var bombs = board['bombs'];
 	board = board['board'];
 	var game_over = false;
@@ -27,6 +28,7 @@ function start_game(start_conditions){
 	$(".board-unit").mousedown( function(e){ click_unit(e); } );
 	$(".board-unit").mouseup( function(e){ off_click_unit(e); } );
 	document.getElementById('board-table').addEventListener('contextmenu', function(e){ e.preventDefault(); return false;}, false);
+	$(this).mouseup( function(e){restore_happy_face_if_event_outside_board(e)} );
 	face.click( function(e){ face_reset_function(); } );
 	
 	function face_reset_function() {
@@ -35,7 +37,13 @@ function start_game(start_conditions){
 		document.getElementById("mines").innerHTML = (total_mines).toString();
 		document.getElementById("clock").innerHTML = "0000";
 		start_game(start_conditions);
-	}
+	};
+	
+	function restore_happy_face_if_event_outside_board(e){
+		if (!curser_on_board(e)) {
+			face.attr("src",  path_for_image_src + 'faces_smile.png');
+		}
+	};
 	
 	//mousedown on a square
 	function click_unit(e){
@@ -56,7 +64,7 @@ function start_game(start_conditions){
 			stop_clock = initialize_clock();
 		}
 		
-		//only execute code if we are clicking an covered square
+		//only execute code if we are clicking a covered square
 		//or if we are right-clicking a flagged square to undo-it
 		//this prevents users from accidentally tripping mines they've flagged
 		if (unit.hasClass('covered') || (flag_click && unit.hasClass("flagged")))
@@ -85,6 +93,48 @@ function start_game(start_conditions){
 				var y = parseInt(params[0]);
 				var x = parseInt(params[1]);
 				clicked_on = board[x][y];
+				
+				switch(clicked_on) {
+					case 0:
+						explore(x,y);
+					case 1:
+						unit.removeClass('covered');
+						unit.addClass('adj-1');
+						break;
+					case 2:
+						unit.removeClass('covered');
+						unit.addClass('adj-2');
+						break;
+					case 3:
+						unit.removeClass('covered');
+						unit.addClass('adj-3');
+						break;
+					case 4:
+						unit.removeClass('covered');
+						unit.addClass('adj-4');
+						break;
+					case 5:
+						unit.removeClass('covered');
+						unit.addClass('adj-5');
+						break;
+					case 6:
+						unit.removeClass('covered');
+						unit.addClass('adj-6');
+						break;
+					case 7:
+						unit.removeClass('covered');
+						unit.addClass('adj-7');
+						break;
+					case 8:
+						unit.removeClass('covered');
+						unit.addClass('adj-8');
+						break;
+					case "m":
+						unit.removeClass('covered');
+						unit.addClass('bomb-activated');
+						game_over = true;
+						break;
+				}
 			}
 		}
 		
@@ -118,6 +168,10 @@ function start_game(start_conditions){
 	function deactivate_board() {
 		$(".board-unit").off('mousedown');
   		$(".board-unit").off('mouseup');
+	}
+	
+	function check_for_win() {
+	
 	}
 	
 	function make_loser_board() {
@@ -218,6 +272,24 @@ function get_board_data_on_page_load(){
 	var b_length = document.getElementById('board-table').getElementsByTagName("tr")[0].getElementsByTagName("td").length;
 	return {h:b_height,l:b_length,b:starting_bombs};
 };
+
+function curser_on_board(e){
+	var board_table = $("#board-table");
+	var board_at = board_table.offset();
+	var board_height = board_table.height();
+	var board_width = board_table.width();
+	var x_coor = e.clientX;
+	var y_coor = e.clientY;
+	if(board_at.left < x_coor && x_coor < (board_at.left + board_width) && 
+	  board_at.top < y_coor && y_coor < (board_at.top + board_height))
+	{
+		return true;
+	}
+	else
+	{
+		return false
+	}
+}
 
 //Code to initialize the clock. Returns a function that will reset the clock.
 function initialize_clock(){
