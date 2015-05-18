@@ -45,7 +45,7 @@
       </div>
     </div>
     <div class="container-fluid" style="width: 100%;">
-	    <table id='board-table' class='board ${difficulty}-b' oncontextmenu="return false;">
+	    <table id='board-table' class='board ${difficulty}-b' >
 	      <tr tal:repeat="row board">
 		    <td tal:repeat="unit row" id="${repeat.unit.index}-${repeat.row.index}" class='board-unit covered'>
 		    </td>
