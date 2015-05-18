@@ -135,6 +135,7 @@ function start_game(start_conditions){
 						game_over = true;
 						break;
 				}
+				check_for_win();
 			}
 		}
 		
@@ -171,7 +172,22 @@ function start_game(start_conditions){
 	}
 	
 	function check_for_win() {
-	
+		for(var x=0;x<b_length;x++)
+		{
+			for(var y=0;y<b_height;y++)
+			{
+				square = $("#" + x + "-" + y);
+				if(square.hasClass("covered") && board[x][y] != "m")
+				{
+					return false;
+				}
+				if(square.hasClass("flagged") && board[x][y] != "m")
+				{
+					return false;
+				}
+			}
+		}
+		game_won = true;
 	}
 	
 	function make_loser_board() {
