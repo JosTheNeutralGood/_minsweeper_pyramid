@@ -90,51 +90,11 @@ function start_game(start_conditions){
 			else
 			{
 				var params = unit.attr('id').split("-");
-				var y = parseInt(params[0]);
-				var x = parseInt(params[1]);
-				clicked_on = board[x][y];
-				
-				switch(clicked_on) {
-					case 0:
-						explore(x,y);
-					case 1:
-						unit.removeClass('covered');
-						unit.addClass('adj-1');
-						break;
-					case 2:
-						unit.removeClass('covered');
-						unit.addClass('adj-2');
-						break;
-					case 3:
-						unit.removeClass('covered');
-						unit.addClass('adj-3');
-						break;
-					case 4:
-						unit.removeClass('covered');
-						unit.addClass('adj-4');
-						break;
-					case 5:
-						unit.removeClass('covered');
-						unit.addClass('adj-5');
-						break;
-					case 6:
-						unit.removeClass('covered');
-						unit.addClass('adj-6');
-						break;
-					case 7:
-						unit.removeClass('covered');
-						unit.addClass('adj-7');
-						break;
-					case 8:
-						unit.removeClass('covered');
-						unit.addClass('adj-8');
-						break;
-					case "m":
-						unit.removeClass('covered');
-						unit.addClass('bomb-activated');
-						game_over = true;
-						break;
-				}
+				var x = parseInt(params[0]);
+				var y = parseInt(params[1]);
+				var uncovered_hash = {};
+				uncovered_hash[unit.attr('id')] = true;
+				uncover_single_square(x,y,uncovered_hash);
 				check_for_win();
 			}
 		}
@@ -165,6 +125,116 @@ function start_game(start_conditions){
 		}
 		return;
 	};
+	
+	//Used to uncover the value of a square.
+	//If we are going to be uncovering squares in a chain from an untouched square
+	//then we will use the explored_hash to pass through squares already explored;
+	function uncover_single_square(x, y, explored_hash) {
+		var symbol = x.toString() + "-" + y.toString();
+		var element = $("#" + symbol);
+		var value_at = board[x][y];
+		switch(value_at) {
+			case 0:
+				element.removeClass('covered');
+				element.addClass('uncovered');
+				explore(x,y,explored_hash);
+			case 1:
+				element.removeClass('covered');
+				element.addClass('adj-1');
+				break;
+			case 2:
+				element.removeClass('covered');
+				element.addClass('adj-2');
+				break;
+			case 3:
+				element.removeClass('covered');
+				element.addClass('adj-3');
+				break;
+			case 4:
+				element.removeClass('covered');
+				element.addClass('adj-4');
+				break;
+			case 5:
+				element.removeClass('covered');
+				element.addClass('adj-5');
+				break;
+			case 6:
+				element.removeClass('covered');
+				element.addClass('adj-6');
+				break;
+			case 7:
+				element.removeClass('covered');
+				element.addClass('adj-7');
+				break;
+			case 8:
+				element.removeClass('covered');
+				element.addClass('adj-8');
+				break;
+		}
+	};
+	
+	function explore(x_start,y_start,explored) {
+		var explore_now = [];
+		var x;
+		var y;
+		square_at_top = (y_start == 0);
+		square_left_edge = (x_start == 0);
+		square_right_edge = (x_start == b_length-1);
+		square_at_bottom = (y_start == b_height-1);
+		
+		//add upper left
+		if(!square_at_top && !square_left_edge){
+		  if_unexplored_add_to_do(x_start-1, y_start-1);
+		}
+		//add above
+		if(!square_at_top && board[x_start][y_start-1] != 'm'){
+		  if_unexplored_add_to_do(x_start, y_start-1);
+		}
+		//add upper right
+		if(!square_at_top && !square_right_edge && board[x_start+1][y_start-1] != 'm'){
+		  if_unexplored_add_to_do(x_start+1, y_start-1);
+		}
+		//add right
+		if(!square_right_edge && board[x_start+1][y_start] != 'm'){
+		  if_unexplored_add_to_do(x_start+1, y_start);
+		}
+		//add bottom right
+		if(!square_at_bottom && !square_right_edge && board[x_start+1][y_start+1] != 'm'){
+		  if_unexplored_add_to_do(x_start+1, y_start+1);
+		}
+		//add bellow
+		if(!square_at_bottom && board[x_start][y_start+1] != 'm'){
+		  if_unexplored_add_to_do(x_start, y_start+1);
+		}
+		 //add bottom left
+		if(!square_at_bottom && !square_left_edge && board[x_start-1][y_start+1] != 'm'){
+		  if_unexplored_add_to_do(x_start-1, y_start+1);
+		}
+		//add left
+		if(!square_left_edge && board[x_start-1][y_start] != 'm'){
+		  board[x_start-1][y_start] = board[x_start-1][y_start] + 1;if_unexplored_add_to_do(x_start-1, y_start-1);
+		}
+		
+		var length_to_explore = explore_now.length;
+		for(var i=0;i<length_to_explore;i++)
+		{
+			uncover_single_square(explore_now[i].x,explore_now[i].y,explored);
+		}
+		
+		function if_unexplored_add_to_do(x,y) {
+			var symbol = x.toString() + "-" + y.toString();
+			var element = $("#" + symbol);
+			if(!element.hasClass('covered'))
+			{
+				explored[symbol] = true
+			}
+			if(!(symbol in explored))
+			{
+				explore_now.push({x:x,y:y});
+				explored[symbol] = true;
+			}
+		};
+	}
 	
 	function deactivate_board() {
 		$(".board-unit").off('mousedown');
