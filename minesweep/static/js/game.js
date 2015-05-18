@@ -11,7 +11,9 @@ function start_game(start_conditions){
 	var game_over = false;
 	var game_won = false;
 	var flags = 0;
-	var reset_clock = initialize_clock();
+	
+	//the function to stop the clock is set to false until the clock starts
+	var stop_clock = false;
 	
 	//just using one of the images to get the path to assets
 	var face = $("#face");
@@ -22,8 +24,7 @@ function start_game(start_conditions){
 	//initializing the listners
 	$(".board-unit").mousedown( function(e){ click_unit(e); } );
 	$(".board-unit").mouseup( function(e){ off_click_unit(e); } );
-	document.addEventListener('contextmenu', function(e){ off_click_unit(e); return false;}, false);
-	//$("#board-table").attr('oncontextmenu', function(e){ return false; });
+	document.getElementById('board-table').addEventListener('contextmenu', function(e){ e.preventDefault(); return false;}, false);
 	
 	function click_unit(e){
 		if(e.button == 0 && $(e.target).hasClass('covered'))
@@ -36,6 +37,11 @@ function start_game(start_conditions){
 		
 		var unit = $(e.target);
 		var flag_click = (e.button == 2 || e.button == 1);
+		
+		if(stop_clock == false) {
+			//first click start the clock and get stop clock function
+			stop_clock = initialize_clock();
+		}
 		
 		//only execute code if we are clicking an covered square
 		//or if we are right-clicking a flagged square to undo-it
@@ -52,7 +58,7 @@ function start_game(start_conditions){
 				}
 				else
 				{
-					//if we right click and it's not covered the function will only fire
+					//If we right click and it's not covered the function will only fire
 					//if the square is flagged to unflag it
 					unit.removeClass('flagged');
 					unit.addClass('covered');
@@ -73,11 +79,13 @@ function start_game(start_conditions){
 		{
 			//document.getElementById("face").className = "dead";
 			face.attr("src",  path_for_image_src + 'faces_dead.png');
+			stop_clock();
 		}
 		else if(game_won)
 		{
 			//document.getElementById("face").className = "cool";
 			face.attr("src",  path_for_image_src + 'faces_cool.png');
+			stop_clock();
 		}
 		else
 		{
@@ -216,6 +224,5 @@ function initialize_clock(){
 	
 	return function() {
 		clearInterval(counter);
-		counter = setInterval(increment_timer(), 1000);
 	};
 };

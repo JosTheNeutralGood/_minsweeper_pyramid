@@ -9,7 +9,7 @@
 }
 
 .game-bar {
-  height: 70px;
+  height: 50px;
   width: 100%;
   margin-bottom: 11px;
 }
@@ -21,8 +21,8 @@
 }
 
 .game-buffer {
-  width: 150px;
-  height: 70px;
+  width: 130px;
+  height: 50px;
 }
 
 .header-buffer {
