@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="container-fluid game-bar">
-      <div class= "subheader-buffer game-buffer">
+      <div class= "game-buffer">
         <div id="mines">${mines}</div>
         <img id="face" src="${request.static_url('minesweep:static/faces_smile.png')}" alt="reset game">
         <div id="clock">0000</div>

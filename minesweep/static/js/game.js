@@ -4,10 +4,12 @@ $(document).ready(function(){
 
 function start_game(start_conditions){
 	//initializing vars
-	var total_bombs = start_conditions['b'];
+	var total_mines = start_conditions['b'];
 	var b_height = start_conditions['h'];
 	var b_length = start_conditions['l'];
-	var board = init_board(b_length, b_height, total_bombs);
+	var board = init_board(b_length, b_height, total_mines);
+	var bombs = board['bombs'];
+	board = board['board'];
 	var game_over = false;
 	var game_won = false;
 	var flags = 0;
@@ -25,7 +27,17 @@ function start_game(start_conditions){
 	$(".board-unit").mousedown( function(e){ click_unit(e); } );
 	$(".board-unit").mouseup( function(e){ off_click_unit(e); } );
 	document.getElementById('board-table').addEventListener('contextmenu', function(e){ e.preventDefault(); return false;}, false);
+	face.click( function(e){ face_reset_function(); } );
 	
+	function face_reset_function() {
+		if(stop_clock){ stop_clock(); }
+		reset_board();
+		document.getElementById("mines").innerHTML = (total_mines).toString();
+		document.getElementById("clock").innerHTML = "0000";
+		start_game(start_conditions);
+	}
+	
+	//mousedown on a square
 	function click_unit(e){
 		if(e.button == 0 && $(e.target).hasClass('covered'))
 		{
@@ -33,6 +45,7 @@ function start_game(start_conditions){
 		}
 	};
 	
+	//mouseup on a square
 	function off_click_unit(e) {
 		
 		var unit = $(e.target);
@@ -64,7 +77,7 @@ function start_game(start_conditions){
 					unit.addClass('covered');
 					flags--;
 				}
-				document.getElementById("mines").innerHTML = (total_bombs - flags).toString();
+				document.getElementById("mines").innerHTML = (total_mines - flags).toString();
 			}
 			else
 			{
@@ -80,12 +93,19 @@ function start_game(start_conditions){
 			//document.getElementById("face").className = "dead";
 			face.attr("src",  path_for_image_src + 'faces_dead.png');
 			stop_clock();
+			//set to false for when reset button is pressed after game close
+			stop_clock = false;
+			deactivate_board();
+			make_loser_board();
 		}
 		else if(game_won)
 		{
 			//document.getElementById("face").className = "cool";
 			face.attr("src",  path_for_image_src + 'faces_cool.png');
 			stop_clock();
+			//set to false for when reset button is pressed after game close
+			stop_clock = false;
+			deactivate_board()
 		}
 		else
 		{
@@ -95,19 +115,27 @@ function start_game(start_conditions){
 		return;
 	};
 	
-	function delete_unique_element_from_array(array, element) {
-		var len = array.length();
-		for(var i=0;i<len;i++)
+	function deactivate_board() {
+		$(".board-unit").off('mousedown');
+  		$(".board-unit").off('mouseup');
+	}
+	
+	function make_loser_board() {
+		var mine;
+		for(var i=0;i<total_mines;i++)
 		{
-			if(array[i] == element)
+			mine = $("#" + mines[i][x] + "-" + mines[i][y]);
+			if(mine.hasClass('covered'))
 			{
-				array.splice(i, 1);
-				return array;
+				mine.removeClass('covered');
+				mine.addClass('bomb-uncovered');
 			}
 		}
-		return array;
 	};
-	return false;
+	
+	function reset_board() {
+		$(".board-unit").attr( "class", "board-unit covered" );
+	};
 };
 
 function init_board(w, h, m) {
@@ -117,8 +145,10 @@ function init_board(w, h, m) {
   var mine_bottom;
   var mine_left;
   var mine_right;
+  var mines = [];
   for(var i =0;i<m;i++) {
     mine = unique_mine(board, w, h);
+    mines.push(unique_mine);
     board[mine['x']][mine['y']] = 'm';
     mine_top = (mine['y'] == 0);
     mine_left = (mine['x'] == 0);
@@ -157,7 +187,7 @@ function init_board(w, h, m) {
       board[mine['x']-1][mine['y']] = board[mine['x']-1][mine['y']] + 1;
     }
   }
-  return board;
+  return {board:board, mines:mines};
 };
   
 function unique_mine(board, w, h){
