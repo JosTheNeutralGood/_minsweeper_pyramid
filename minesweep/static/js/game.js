@@ -195,45 +195,47 @@ function start_game(start_conditions){
 		while(explore_queue.length > 0)
 		{
 			current = explore_queue.pop();
-			x = current[x];
-			y = current[y];
+			x = current['x'];
+			y = current['y'];
 			square_at_top = (y == 0);
 			square_left_edge = (x == 0);
 			square_right_edge = (x == b_length-1);
 			square_at_bottom = (y == b_height-1);
 		
-			//add upper left
-			if(!square_at_top && !square_left_edge){
-			  uncover_and_add_to_queue_if_unadjacent(x_start-1, y_start-1);
-			}
-			//add above
-			if(!square_at_top && board[x_start][y_start-1] != 'm'){
-			  uncover_and_add_to_queue_if_unadjacent(x_start, y_start-1);
-			}
-			//add upper right
-			if(!square_at_top && !square_right_edge && board[x_start+1][y_start-1] != 'm'){
-			  uncover_and_add_to_queue_if_unadjacent(x_start+1, y_start-1);
+			//add left
+			if(!square_left_edge && board[x-1][y] != 'm'){
+			  uncover_and_add_to_queue_if_unadjacent(x-1, y);
 			}
 			//add right
-			if(!square_right_edge && board[x_start+1][y_start] != 'm'){
-			  uncover_and_add_to_queue_if_unadjacent(x_start+1, y_start);
+			if(!square_right_edge && board[x+1][y] != 'm'){
+			  uncover_and_add_to_queue_if_unadjacent(x+1, y);
 			}
-			//add bottom right
-			if(!square_at_bottom && !square_right_edge && board[x_start+1][y_start+1] != 'm'){
-			  uncover_and_add_to_queue_if_unadjacent(x_start+1, y_start+1);
+			//add above
+			if(!square_at_top && board[x][y-1] != 'm'){
+			  uncover_and_add_to_queue_if_unadjacent(x, y-1);
 			}
 			//add bellow
-			if(!square_at_bottom && board[x_start][y_start+1] != 'm'){
-			  uncover_and_add_to_queue_if_unadjacent(x_start, y_start+1);
+			if(!square_at_bottom && board[x][y+1] != 'm'){
+			  uncover_and_add_to_queue_if_unadjacent(x, y+1);
 			}
+			
+			//add upper left
+			//if(!square_at_top && !square_left_edge){
+			  //uncover_and_add_to_queue_if_unadjacent(x_start-1, y_start-1);
+			//}
+			//add upper right
+			//if(!square_at_top && !square_right_edge && board[x_start+1][y_start-1] != 'm'){
+			  //uncover_and_add_to_queue_if_unadjacent(x_start+1, y_start-1);
+			//}
+			//add bottom right
+			//if(!square_at_bottom && !square_right_edge && board[x_start+1][y_start+1] != 'm'){
+			  //uncover_and_add_to_queue_if_unadjacent(x_start+1, y_start+1);
+			//}
 			 //add bottom left
-			if(!square_at_bottom && !square_left_edge && board[x_start-1][y_start+1] != 'm'){
-			  uncover_and_add_to_queue_if_unadjacent(x_start-1, y_start+1);
-			}
-			//add left
-			if(!square_left_edge && board[x_start-1][y_start] != 'm'){
-			  uncover_and_add_to_queue_if_unadjacent(x_start-1, y_start);
-			}
+			//if(!square_at_bottom && !square_left_edge && board[x_start-1][y_start+1] != 'm'){
+			  //uncover_and_add_to_queue_if_unadjacent(x_start-1, y_start+1);
+			//}
+			
 		}
 		
 		//If the square is covered I reveal it's value and it it's unadjacent to any bombs
