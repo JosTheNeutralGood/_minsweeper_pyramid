@@ -118,7 +118,7 @@ h2 {
 }
 
 .uncovered {
-  background-image: url("grid_icon_uncovered.bmp");
+  background-image: url("grid_icon_empty.bmp");
 }
 
 .covered {

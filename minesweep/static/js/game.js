@@ -9,7 +9,7 @@ function start_game(start_conditions){
 	var b_length = start_conditions['l'];
 	var board = init_board(b_length, b_height, total_mines);
 	//storing a list of bombs that were planted for later reference
-	var bombs = board['bombs'];
+	var bombs = board['mines'];
 	board = board['board'];
 	var game_over = false;
 	var game_won = false;
@@ -92,9 +92,10 @@ function start_game(start_conditions){
 				var params = unit.attr('id').split("-");
 				var x = parseInt(params[0]);
 				var y = parseInt(params[1]);
-				var uncovered_hash = {};
-				uncovered_hash[unit.attr('id')] = true;
-				uncover_single_square(x,y,uncovered_hash);
+				if(uncover_single_square(x,y) === 0)
+				{
+					explore(x,y);
+				}
 				check_for_win();
 			}
 		}
@@ -127,17 +128,19 @@ function start_game(start_conditions){
 	};
 	
 	//Used to uncover the value of a square.
-	//If we are going to be uncovering squares in a chain from an untouched square
-	//then we will use the explored_hash to pass through squares already explored;
-	function uncover_single_square(x, y, explored_hash) {
+	function uncover_single_square(x, y) {
 		var symbol = x.toString() + "-" + y.toString();
 		var element = $("#" + symbol);
+		if(!element.hasClass('covered'))
+		{
+			return false;
+		}
 		var value_at = board[x][y];
 		switch(value_at) {
 			case 0:
 				element.removeClass('covered');
 				element.addClass('uncovered');
-				explore(x,y,explored_hash);
+				break;
 			case 1:
 				element.removeClass('covered');
 				element.addClass('adj-1');
@@ -170,70 +173,80 @@ function start_game(start_conditions){
 				element.removeClass('covered');
 				element.addClass('adj-8');
 				break;
+			case "m":
+				element.removeClass('covered');
+				element.addClass('bomb-activated');
+				game_over = true;
+				break;
 		}
+		return value_at;
 	};
 	
-	function explore(x_start,y_start,explored) {
-		var explore_now = [];
+	function explore(x_start,y_start) {
+		var explore_queue = [{x:x_start,y:y_start}];
+		var current;
 		var x;
 		var y;
-		square_at_top = (y_start == 0);
-		square_left_edge = (x_start == 0);
-		square_right_edge = (x_start == b_length-1);
-		square_at_bottom = (y_start == b_height-1);
+		var square_at_bottom;
+		var square_at_top;
+		var square_left_edge;
+		var square_right_edge;
 		
-		//add upper left
-		if(!square_at_top && !square_left_edge){
-		  if_unexplored_add_to_do(x_start-1, y_start-1);
-		}
-		//add above
-		if(!square_at_top && board[x_start][y_start-1] != 'm'){
-		  if_unexplored_add_to_do(x_start, y_start-1);
-		}
-		//add upper right
-		if(!square_at_top && !square_right_edge && board[x_start+1][y_start-1] != 'm'){
-		  if_unexplored_add_to_do(x_start+1, y_start-1);
-		}
-		//add right
-		if(!square_right_edge && board[x_start+1][y_start] != 'm'){
-		  if_unexplored_add_to_do(x_start+1, y_start);
-		}
-		//add bottom right
-		if(!square_at_bottom && !square_right_edge && board[x_start+1][y_start+1] != 'm'){
-		  if_unexplored_add_to_do(x_start+1, y_start+1);
-		}
-		//add bellow
-		if(!square_at_bottom && board[x_start][y_start+1] != 'm'){
-		  if_unexplored_add_to_do(x_start, y_start+1);
-		}
-		 //add bottom left
-		if(!square_at_bottom && !square_left_edge && board[x_start-1][y_start+1] != 'm'){
-		  if_unexplored_add_to_do(x_start-1, y_start+1);
-		}
-		//add left
-		if(!square_left_edge && board[x_start-1][y_start] != 'm'){
-		  board[x_start-1][y_start] = board[x_start-1][y_start] + 1;if_unexplored_add_to_do(x_start-1, y_start-1);
-		}
-		
-		var length_to_explore = explore_now.length;
-		for(var i=0;i<length_to_explore;i++)
+		while(explore_queue.length > 0)
 		{
-			uncover_single_square(explore_now[i].x,explore_now[i].y,explored);
+			current = explore_queue.pop();
+			x = current[x];
+			y = current[y];
+			square_at_top = (y == 0);
+			square_left_edge = (x == 0);
+			square_right_edge = (x == b_length-1);
+			square_at_bottom = (y == b_height-1);
+		
+			//add upper left
+			if(!square_at_top && !square_left_edge){
+			  uncover_and_add_to_queue_if_unadjacent(x_start-1, y_start-1);
+			}
+			//add above
+			if(!square_at_top && board[x_start][y_start-1] != 'm'){
+			  uncover_and_add_to_queue_if_unadjacent(x_start, y_start-1);
+			}
+			//add upper right
+			if(!square_at_top && !square_right_edge && board[x_start+1][y_start-1] != 'm'){
+			  uncover_and_add_to_queue_if_unadjacent(x_start+1, y_start-1);
+			}
+			//add right
+			if(!square_right_edge && board[x_start+1][y_start] != 'm'){
+			  uncover_and_add_to_queue_if_unadjacent(x_start+1, y_start);
+			}
+			//add bottom right
+			if(!square_at_bottom && !square_right_edge && board[x_start+1][y_start+1] != 'm'){
+			  uncover_and_add_to_queue_if_unadjacent(x_start+1, y_start+1);
+			}
+			//add bellow
+			if(!square_at_bottom && board[x_start][y_start+1] != 'm'){
+			  uncover_and_add_to_queue_if_unadjacent(x_start, y_start+1);
+			}
+			 //add bottom left
+			if(!square_at_bottom && !square_left_edge && board[x_start-1][y_start+1] != 'm'){
+			  uncover_and_add_to_queue_if_unadjacent(x_start-1, y_start+1);
+			}
+			//add left
+			if(!square_left_edge && board[x_start-1][y_start] != 'm'){
+			  uncover_and_add_to_queue_if_unadjacent(x_start-1, y_start);
+			}
 		}
 		
-		function if_unexplored_add_to_do(x,y) {
-			var symbol = x.toString() + "-" + y.toString();
-			var element = $("#" + symbol);
-			if(!element.hasClass('covered'))
+		//If the square is covered I reveal it's value and it it's unadjacent to any bombs
+		//then I add it to the queue
+		function uncover_and_add_to_queue_if_unadjacent(x,y)
+		{
+			var value = uncover_single_square(x,y);
+			if((!(value === false)) && value ===0)
 			{
-				explored[symbol] = true
-			}
-			if(!(symbol in explored))
-			{
-				explore_now.push({x:x,y:y});
-				explored[symbol] = true;
+				explore_queue.push({x:x,y:y});
 			}
 		};
+		
 	}
 	
 	function deactivate_board() {
@@ -264,7 +277,13 @@ function start_game(start_conditions){
 		var mine;
 		for(var i=0;i<total_mines;i++)
 		{
-			mine = $("#" + mines[i][x] + "-" + mines[i][y]);
+			// variable 'bombs' is saved at init of board for reference here
+			//Overdoing the variables common to all functions in my game initialization scope a bit
+			//Would refactor this a bit maybe even have separate object types for each 
+			//kind of board unit and store instances of them in a grid with references 
+			//to their neighbours to handle their events separately
+			//have bomb squares listen for the end of game event and reveal themselves etc
+			mine = $("#" + bombs[i]['x'] + "-" + bombs[i]['y']);
 			if(mine.hasClass('covered'))
 			{
 				mine.removeClass('covered');
@@ -288,7 +307,7 @@ function init_board(w, h, m) {
   var mines = [];
   for(var i =0;i<m;i++) {
     mine = unique_mine(board, w, h);
-    mines.push(unique_mine);
+    mines.push(mine);
     board[mine['x']][mine['y']] = 'm';
     mine_top = (mine['y'] == 0);
     mine_left = (mine['x'] == 0);
